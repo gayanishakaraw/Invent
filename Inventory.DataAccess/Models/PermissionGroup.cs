@@ -8,7 +8,6 @@ namespace Inventory.DataAccess.Models
     {
         public int PermissionGroupId { get; set; }
         public string PermissionGroupName { get; set; }
-        public List<Permission> Permissions { get; set; }
         public bool IsActive { get; set; }
         public int CompanyId { get; set; }
     }

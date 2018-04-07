@@ -30,6 +30,7 @@ namespace Inventory.DataAccess.Business.Auth
                 result.RoleId = attmpt.RoleId;
                 result.CompanyId = attmpt.CompanyId;
                 result.Success = true;
+                result.UserId = attmpt.UserId;
             }
 
             return result;

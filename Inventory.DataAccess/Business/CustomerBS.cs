@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Inventory.DataAccess.Business
 {
-    class CustomerBS
+    public class CustomerBS
     {
         static AppDbContext appDb = new AppDbContext();
 

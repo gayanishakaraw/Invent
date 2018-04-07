@@ -59,6 +59,7 @@
             // 
             this.maskedTextBox1.Location = new System.Drawing.Point(132, 21);
             this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.PasswordChar = '*';
             this.maskedTextBox1.Size = new System.Drawing.Size(184, 20);
             this.maskedTextBox1.TabIndex = 1;
             // 
@@ -66,6 +67,7 @@
             // 
             this.maskedTextBox2.Location = new System.Drawing.Point(131, 57);
             this.maskedTextBox2.Name = "maskedTextBox2";
+            this.maskedTextBox2.PasswordChar = '*';
             this.maskedTextBox2.Size = new System.Drawing.Size(184, 20);
             this.maskedTextBox2.TabIndex = 2;
             this.maskedTextBox2.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox2_MaskInputRejected);
@@ -105,6 +107,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(368, 143);
+            this.ControlBox = false;
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button_close);
             this.Controls.Add(this.button_save);

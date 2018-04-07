@@ -40,7 +40,7 @@ namespace Inventory.DataAccess.Business
             var itm = appDb.Items.FirstOrDefault(item => item.ItemId == record.ItemId);
 
             itm.ItemName = record.ItemName;
-            itm.Categories = record.Categories;
+            itm.CategoryId = record.CategoryId;
             itm.Price = record.Price;
             itm.Remarks = record.Remarks;
             appDb.SaveChanges();

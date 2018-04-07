@@ -73,6 +73,14 @@
     <Compile Include="Migrations\201804051944559_DbVersion3.Designer.cs">
       <DependentUpon>201804051944559_DbVersion3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804070627176_DbVersion4.cs" />
+    <Compile Include="Migrations\201804070627176_DbVersion4.Designer.cs">
+      <DependentUpon>201804070627176_DbVersion4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804070651062_DbVersion5.cs" />
+    <Compile Include="Migrations\201804070651062_DbVersion5.Designer.cs">
+      <DependentUpon>201804070651062_DbVersion5.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AuthResponse.cs" />
     <Compile Include="Models\Category.cs" />
@@ -105,6 +113,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804051944559_DbVersion3.resx">
       <DependentUpon>201804051944559_DbVersion3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804070627176_DbVersion4.resx">
+      <DependentUpon>201804070627176_DbVersion4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804070651062_DbVersion5.resx">
+      <DependentUpon>201804070651062_DbVersion5.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

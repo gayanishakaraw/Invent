@@ -23,5 +23,10 @@ namespace Inventory.UI
             AppConfiguration config = new AppConfiguration();
             config.Show();
         }
+
+        private void button_Invoice_Click(object sender, EventArgs e)
+        {
+            Invoice.Invoice.Instance.Show();
+        }
     }
 }

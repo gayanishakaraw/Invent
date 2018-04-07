@@ -6,6 +6,13 @@ using System.Text;
 
 namespace Inventory.DataAccess.Business.Auth
 {
+    public enum Actions
+    {
+        None = 0,
+        Edit,
+        Read,
+    }
+
     public enum Modules
     {
         Company = 1,
@@ -17,7 +24,8 @@ namespace Inventory.DataAccess.Business.Auth
         Payment,
         User,
         Role,
-        Permission
+        Permission,
+        Inventory
     }
 
     public class PermissionBS
@@ -80,7 +88,6 @@ namespace Inventory.DataAccess.Business.Auth
 
             itm.IsActive = record.IsActive;
             itm.PermissionGroupName = record.PermissionGroupName;
-            itm.Permissions = record.Permissions;
 
             appDb.SaveChanges();
         }
@@ -101,7 +108,7 @@ namespace Inventory.DataAccess.Business.Auth
         {
             var user = appDb.Users.FirstOrDefault(item => item.UserId == userId);
             int permissionGroup = appDb.Roles.FirstOrDefault(item => item.RoleId == user.RoleId).PermissionGroupId;
-            var permissions = appDb.PermissionGroups.FirstOrDefault(item => item.PermissionGroupId == permissionGroup).Permissions;
+            var permissions = appDb.Permissions.Where(item => item.PermissionGroupId == permissionGroup);
 
             var setting = permissions.FirstOrDefault(item => item.ModuleId == moduleId);
 
@@ -115,7 +122,7 @@ namespace Inventory.DataAccess.Business.Auth
         {
             var user = appDb.Users.FirstOrDefault(item => item.UserId == userId);
             int permissionGroup = appDb.Roles.FirstOrDefault(item => item.RoleId == user.RoleId).PermissionGroupId;
-            var permissions = appDb.PermissionGroups.FirstOrDefault(item => item.PermissionGroupId == permissionGroup).Permissions;
+            var permissions = appDb.Permissions.Where(item => item.PermissionGroupId == permissionGroup);
 
             var setting = permissions.FirstOrDefault(item => item.ModuleId == moduleId);
 
@@ -129,7 +136,7 @@ namespace Inventory.DataAccess.Business.Auth
         {
             var user = appDb.Users.FirstOrDefault(item => item.UserId == userId);
             int permissionGroup = appDb.Roles.FirstOrDefault(item => item.RoleId == user.RoleId).PermissionGroupId;
-            var permissions = appDb.PermissionGroups.FirstOrDefault(item => item.PermissionGroupId == permissionGroup).Permissions;
+            var permissions = appDb.Permissions.Where(item => item.PermissionGroupId == permissionGroup);
 
             var setting = permissions.FirstOrDefault(item => item.ModuleId == moduleId);
 
@@ -143,7 +150,7 @@ namespace Inventory.DataAccess.Business.Auth
         {
             var user = appDb.Users.FirstOrDefault(item => item.UserId == userId);
             int permissionGroup = appDb.Roles.FirstOrDefault(item => item.RoleId == user.RoleId).PermissionGroupId;
-            var permissions = appDb.PermissionGroups.FirstOrDefault(item => item.PermissionGroupId == permissionGroup).Permissions;
+            var permissions = appDb.Permissions.Where(item => item.PermissionGroupId == permissionGroup);
 
             var setting = permissions.FirstOrDefault(item => item.ModuleId == moduleId);
 
@@ -157,7 +164,10 @@ namespace Inventory.DataAccess.Business.Auth
         {
             var record = appDb.PermissionGroups.FirstOrDefault(item => item.PermissionGroupId == id);
             record.IsActive = false;
-            appDb.Permissions.RemoveRange(record.Permissions);
+
+            var permissions = appDb.Permissions.Where(item => item.PermissionGroupId == id);
+            appDb.Permissions.RemoveRange(permissions);
+
             appDb.SaveChanges();
         }
     }

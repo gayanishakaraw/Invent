@@ -7,28 +7,28 @@ using System.Text;
 
 namespace Inventory.DataAccess.Business.Inventory
 {
-    public class ItemStockStockBS
+    public class ItemStockBS
     {
-        AppDbContext appDb = new AppDbContext();
+        static AppDbContext appDb = new AppDbContext();
 
-        public ItemStock GetItemStockById(int id)
+        public static ItemStock GetItemStockById(int id)
         {
             return appDb.ItemStocks.FirstOrDefault(item => item.ItemStockId == id);
         }
 
-        public List<ItemStock> GetAllItemStocks()
+        public static List<ItemStock> GetAllItemStocks()
         {
             return appDb.ItemStocks.ToList();
         }
 
-        public bool IsRequiredToReorder(int id)
+        public static bool IsRequiredToReorder(int id)
         {
             var stockItem = appDb.ItemStocks.FirstOrDefault(item => item.ItemStockId == id);
 
             return stockItem.Qty <= stockItem.MinimumQty;
         }
 
-        public ItemStock AddItemStock(ItemStock itemStock)
+        public static ItemStock AddItemStock(ItemStock itemStock)
         {
             if (GetItemStockById(itemStock.ItemStockId) != null)
             {
@@ -43,12 +43,12 @@ namespace Inventory.DataAccess.Business.Inventory
             }
         }
 
-        public void DeleteItemStock(int id)
+        public static void DeleteItemStock(int id)
         {
             appDb.ItemStocks.FirstOrDefault(item => item.ItemStockId == id).Qty = 0;
             appDb.SaveChanges();
         }
-        public void EditItemStock(ItemStock record)
+        public static void EditItemStock(ItemStock record)
         {
             var itm = appDb.ItemStocks.FirstOrDefault(item => item.ItemStockId == record.ItemStockId);
 
@@ -58,7 +58,7 @@ namespace Inventory.DataAccess.Business.Inventory
             appDb.SaveChanges();
         }
 
-        public void UpdateStock(int itemId, decimal qty)
+        public static void UpdateStock(int itemId, decimal qty)
         {
             var itm = appDb.ItemStocks.FirstOrDefault(item => item.ItemId == itemId);
             itm.Qty = itm.Qty + qty;

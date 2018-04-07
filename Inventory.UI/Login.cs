@@ -26,9 +26,10 @@ namespace Inventory.UI
 
             // TESTING
             resp = new AuthResponse();
-            //resp.CompanyId = 1;
+            resp.CompanyId = 1;
+            resp.UserId = 1;
             resp.UserName = "SuperAdmin";
-            //resp.RoleId = 1;
+            resp.RoleId = 1;
             resp.Success = true;
 
 

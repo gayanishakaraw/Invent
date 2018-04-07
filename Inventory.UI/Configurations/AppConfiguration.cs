@@ -2,6 +2,7 @@
 using Inventory.DataAccess.Business;
 using Inventory.DataAccess.Business.Auth;
 using Inventory.DataAccess.Models;
+using Inventory.UI.Common;
 using Inventory.UI.Models;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace Inventory.UI.Configurations
             GenerateCommonColumns();
         }
 
-        private void button_Users_Click( object sender, EventArgs e)
+        private void button_Users_Click(object sender, EventArgs e)
         {
             PopulateUserGrid();
         }
@@ -155,7 +156,15 @@ namespace Inventory.UI.Configurations
 
         private void button_Organization_Click(object sender, EventArgs e)
         {
-            PopulateOrganization();
+            if (PermissionBS.HasFullAccess(Session.Instance.AuthUser.UserId, (int)Modules.Company) ||
+                PermissionBS.HasAccessToRead(Session.Instance.AuthUser.UserId, (int)Modules.Company))
+            {
+                PopulateOrganization();
+            }
+            else
+            {
+                MessageBox.Show("User doesn't have access to this module.");
+            }
         }
 
         private void PopulateOrganization()
@@ -184,6 +193,9 @@ namespace Inventory.UI.Configurations
                 switch (dataGridView1.Rows[e.RowIndex].DataBoundItem.GetType().Name)
                 {
                     case "User":
+                        if (!Access.Instance.CanProceed(Modules.User, Actions.Edit))
+                            return;
+
                         User user = (User)dataGridView1.Rows[e.RowIndex].DataBoundItem;
                         user.CompanyId = Session.Instance.AuthUser.CompanyId;
                         user.RoleId = (int)dataGridView1.Rows[e.RowIndex].Cells["Role"].Value;
@@ -191,10 +203,16 @@ namespace Inventory.UI.Configurations
                         PopulateUserGrid();
                         break;
                     case "Role":
+                        if (!Access.Instance.CanProceed(Modules.Role, Actions.Edit))
+                            return;
+
                         RoleBS.AddRole((Role)dataGridView1.Rows[e.RowIndex].DataBoundItem);
                         PopulateRoles();
                         break;
                     case "Company":
+                        if (!Access.Instance.CanProceed(Modules.Company, Actions.Edit))
+                            return;
+
                         CompanyBS.AddCompany((Company)dataGridView1.Rows[e.RowIndex].DataBoundItem);
                         PopulateOrganization();
                         break;
@@ -206,14 +224,23 @@ namespace Inventory.UI.Configurations
                 switch (dataGridView1.Rows[e.RowIndex].DataBoundItem.GetType().Name)
                 {
                     case "User":
+                        if (!Access.Instance.CanProceed(Modules.User, Actions.Edit))
+                            return;
+
                         UserBS.DeleteUser(((User)dataGridView1.Rows[e.RowIndex].DataBoundItem).UserId);
                         PopulateUserGrid();
                         break;
                     case "Role":
+                        if (!Access.Instance.CanProceed(Modules.Role, Actions.Edit))
+                            return;
+
                         RoleBS.DeleteRole(((Role)dataGridView1.Rows[e.RowIndex].DataBoundItem).RoleId);
                         PopulateRoles();
                         break;
                     case "Company":
+                        if (!Access.Instance.CanProceed(Modules.Company, Actions.Edit))
+                            return;
+
                         CompanyBS.DeleteCompany(((Company)dataGridView1.Rows[e.RowIndex].DataBoundItem).CompanyId);
                         PopulateOrganization();
                         break;
@@ -239,8 +266,11 @@ namespace Inventory.UI.Configurations
 
         private void button_Access_Click(object sender, EventArgs e)
         {
-            AccessControl accessControl = new AccessControl();
-            accessControl.Show();
+            if (Access.Instance.CanProceed(Modules.Permission, Actions.Read) || Access.Instance.CanProceed(Modules.Permission, Actions.Edit))
+            {
+                AccessControl accessControl = new AccessControl();
+                accessControl.Show();
+            }
         }
     }
 }

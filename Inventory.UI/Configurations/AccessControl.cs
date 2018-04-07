@@ -15,8 +15,8 @@ namespace Inventory.UI.Configurations
 {
     public partial class AccessControl : Form
     {
-        private List<PermissionGroup> mPermissionGroup = new List<PermissionGroup>();
         private int mSelectedPermissionGroupId = 0;
+        private string mSelectedPermissionGroupName = string.Empty;
 
         public AccessControl()
         {
@@ -25,7 +25,6 @@ namespace Inventory.UI.Configurations
 
         private void AccessControl_Load(object sender, EventArgs e)
         {
-            mPermissionGroup = PermissionBS.GetAllPermissionsGroups();
             PopulatPermissionGroups();
         }
 
@@ -36,10 +35,15 @@ namespace Inventory.UI.Configurations
 
         private void PopulatPermissionGroups()
         {
+            for (int i = 0; i < dataGridView2.ColumnCount; i++)
+            {
+                dataGridView2.Columns.RemoveAt(i);
+            }
+
             List<PermissionGroup> activePermissionGroup = null;
             using (var context = new AppDbContext())
             {
-                activePermissionGroup = mPermissionGroup.Where(permissionGroup => permissionGroup.IsActive && permissionGroup.CompanyId == Session.Instance.AuthUser.CompanyId).ToList();
+                activePermissionGroup = PermissionBS.GetAllPermissionsGroups().Where(permissionGroup => permissionGroup.IsActive && permissionGroup.CompanyId == Session.Instance.AuthUser.CompanyId).ToList();
             }
 
             var permissionGrouplist = new BindingList<PermissionGroup>(activePermissionGroup);
@@ -55,11 +59,19 @@ namespace Inventory.UI.Configurations
             if (dataGridView2.Columns.Contains("Permissions"))
                 dataGridView2.Columns.Remove("Permissions");
 
+            if (dataGridView2.Columns.Contains("Save"))
+                dataGridView2.Columns.Remove("Save");
+
+            if (dataGridView2.Columns.Contains("Delete"))
+                dataGridView2.Columns.Remove("Delete");
+
             GenerateCommonColumns(dataGridView2);
         }
 
         private void PopulatPermissions(List<Permission> permissions)
         {
+            label_permissionGroupName.Text = mSelectedPermissionGroupName;
+
             if (permissions == null)
                 return;
 
@@ -70,14 +82,17 @@ namespace Inventory.UI.Configurations
                 activePermissions = permissions.Where(permission => permission.PermissionGroupId == mSelectedPermissionGroupId && permission.CompanyId == Session.Instance.AuthUser.CompanyId).ToList();
             }
 
+            if (dataGridView1.Columns.Contains("Module"))
+                dataGridView1.Columns.Remove("Module");
+
             var permissionslist = new BindingList<Permission>(activePermissions);
+
+            dataGridView1.DataSource = permissionslist;
 
             DataGridViewTextBoxColumn module = new DataGridViewTextBoxColumn();
             module.HeaderText = "Module";
             module.Name = "Module";
             dataGridView1.Columns.Add(module);
-
-            dataGridView1.DataSource = permissionslist;
 
             if (dataGridView1.Columns.Contains("PermissionId"))
                 dataGridView1.Columns.Remove("PermissionId");
@@ -97,7 +112,7 @@ namespace Inventory.UI.Configurations
                     item.Cells["Module"].Value = Enum.GetName(typeof(Modules), item.Cells["ModuleId"].Value);
             }
 
-            GenerateCommonColumns(dataGridView2, true);
+            //GenerateCommonColumns(dataGridView1, true);
             dataGridView1.AllowUserToAddRows = false;
         }
 
@@ -136,29 +151,36 @@ namespace Inventory.UI.Configurations
             var record = (PermissionGroup)dataGridView2.Rows[e.RowIndex].DataBoundItem;
             record.CompanyId = Session.Instance.AuthUser.CompanyId;
 
+            var permissions = PermissionBS.GetPermissionByPermissionGroupId(record.PermissionGroupId);
+
             mSelectedPermissionGroupId = record.PermissionGroupId;
+            mSelectedPermissionGroupName = record.PermissionGroupName;
 
             if (e.ColumnIndex == dataGridView2.Columns["Save"].Index)
             {
-                if (record.Permissions == null || record.Permissions.Count < 1)
+                if (permissions == null || permissions.Count < 1)
                 {
-                    List<Permission> permissions = new List<Permission>();
+                    List<Permission> perms = new List<Permission>();
 
-                    for (int i = 1; i < 11; i++)
+                    for (int i = 1; i < typeof(Modules).GetEnumNames().Count(); i++)
                     {
-                        permissions.Add(new Permission() { PermissionGroupId = mSelectedPermissionGroupId, ModuleId = i, CompanyId = Session.Instance.AuthUser.CompanyId });
+                        PermissionBS.AddPermission(new Permission() { PermissionGroupId = mSelectedPermissionGroupId, ModuleId = i, CompanyId = Session.Instance.AuthUser.CompanyId });
                     }
-
-                    record.Permissions = permissions;
                 }
 
                 var entry = PermissionBS.AddPermissionGroup(record);
                 mSelectedPermissionGroupId = entry.PermissionGroupId;
+                PopulatPermissionGroups();
+                PopulatPermissions(PermissionBS.GetPermissionByPermissionGroupId(mSelectedPermissionGroupId));
+
                 return;
             }
             if (e.ColumnIndex == dataGridView2.Columns["Delete"].Index)
             {
                 PermissionBS.DeletePermissionByPermissionGroupId(mSelectedPermissionGroupId);
+                PopulatPermissionGroups();
+                PopulatPermissions(PermissionBS.GetPermissionByPermissionGroupId(mSelectedPermissionGroupId));
+
                 return;
             }
 
@@ -199,10 +221,10 @@ namespace Inventory.UI.Configurations
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 Permission perm = new Permission();
-
+                perm.PermissionId = ((Permission)dataGridView1.Rows[row.Index].DataBoundItem).PermissionId;
                 perm.PermissionGroupId = mSelectedPermissionGroupId;
                 perm.CompanyId = Session.Instance.AuthUser.CompanyId;
-                perm.ModuleId = Enum.GetNames(typeof(Modules)).ToList().IndexOf(dataGridView1.Rows[row.Index].Cells["ModuleId"].Value.ToString());
+                perm.ModuleId = (int)dataGridView1.Rows[row.Index].Cells["ModuleId"].Value;
                 perm.FullAccess = (bool)dataGridView1.Rows[row.Index].Cells["FullAccess"].Value;
                 perm.CanEdit = (bool)dataGridView1.Rows[row.Index].Cells["CanEdit"].Value;
                 perm.CanRead = (bool)dataGridView1.Rows[row.Index].Cells["CanRead"].Value;
@@ -210,6 +232,8 @@ namespace Inventory.UI.Configurations
 
                 PermissionBS.AddPermission(perm);
             }
+
+            PopulatPermissions(PermissionBS.GetPermissionByPermissionGroupId(mSelectedPermissionGroupId));
         }
     }
 }

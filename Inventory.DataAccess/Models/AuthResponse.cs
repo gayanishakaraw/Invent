@@ -13,7 +13,8 @@ namespace Inventory.DataAccess.Models
         public string Message { get; set; }
 
         public bool Success { get; set; }
-        public int RoleId { get; internal set; }
-        public int CompanyId { get; internal set; }
+        public int RoleId { get; set; }
+        public int CompanyId { get; set; }
+        public int UserId { get; set; }
     }
 }

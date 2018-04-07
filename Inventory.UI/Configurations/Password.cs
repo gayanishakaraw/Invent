@@ -32,9 +32,18 @@ namespace Inventory.UI.Configurations
 
         private void button_save_Click(object sender, EventArgs e)
         {
-            _user.Password = maskedTextBox1.Text;
-            this.Close();
-            Owner.Show();
+            if (maskedTextBox1.Text != maskedTextBox2.Text)
+            {
+                label3.Visible = true;
+                label3.Text = "Password doesn't match";
+            }
+            else
+            {
+                label3.Visible = false;
+                _user.Password = maskedTextBox1.Text;
+                this.Close();
+                Owner.Show();
+            }
         }
     }
 }

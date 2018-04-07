@@ -20,6 +20,11 @@ namespace Inventory.DataAccess.Business
             return appDb.OrderDetails.ToList();
         }
 
+        public static List<OrderDetail> GetAllOrderDetailsByOrderId(int orderId)
+        {
+            return appDb.OrderDetails.ToList().Where(item => item.OrderId == orderId).ToList();
+        }
+
         public static  OrderDetail AddOrderDetail(OrderDetail orderDetail)
         {
             if (GetOrderDetailById(orderDetail.OrderDetailId) != null)

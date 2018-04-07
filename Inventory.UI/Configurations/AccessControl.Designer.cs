@@ -34,6 +34,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.button_save = new System.Windows.Forms.Button();
+            this.label_permissionGroupName = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -42,10 +43,11 @@
             // 
             // panel2
             // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.Controls.Add(this.dataGridView1);
-            this.panel2.Location = new System.Drawing.Point(436, 62);
+            this.panel2.Location = new System.Drawing.Point(561, 62);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(346, 313);
+            this.panel2.Size = new System.Drawing.Size(561, 313);
             this.panel2.TabIndex = 1;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
@@ -55,7 +57,7 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(346, 313);
+            this.dataGridView1.Size = new System.Drawing.Size(561, 313);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -74,7 +76,7 @@
             this.panel1.Controls.Add(this.dataGridView2);
             this.panel1.Location = new System.Drawing.Point(13, 62);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(417, 313);
+            this.panel1.Size = new System.Drawing.Size(529, 313);
             this.panel1.TabIndex = 3;
             // 
             // dataGridView2
@@ -83,13 +85,14 @@
             this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView2.Location = new System.Drawing.Point(0, 0);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(417, 313);
+            this.dataGridView2.Size = new System.Drawing.Size(529, 313);
             this.dataGridView2.TabIndex = 0;
             this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
             // button_save
             // 
-            this.button_save.Location = new System.Drawing.Point(707, 391);
+            this.button_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_save.Location = new System.Drawing.Point(1047, 391);
             this.button_save.Name = "button_save";
             this.button_save.Size = new System.Drawing.Size(75, 23);
             this.button_save.TabIndex = 1;
@@ -97,11 +100,21 @@
             this.button_save.UseVisualStyleBackColor = true;
             this.button_save.Click += new System.EventHandler(this.button_save_Click);
             // 
+            // label_permissionGroupName
+            // 
+            this.label_permissionGroupName.AutoSize = true;
+            this.label_permissionGroupName.Location = new System.Drawing.Point(564, 43);
+            this.label_permissionGroupName.Name = "label_permissionGroupName";
+            this.label_permissionGroupName.Size = new System.Drawing.Size(10, 13);
+            this.label_permissionGroupName.TabIndex = 4;
+            this.label_permissionGroupName.Text = " ";
+            // 
             // AccessControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 426);
+            this.ClientSize = new System.Drawing.Size(1134, 426);
+            this.Controls.Add(this.label_permissionGroupName);
             this.Controls.Add(this.button_save);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
@@ -126,5 +139,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Button button_save;
+        private System.Windows.Forms.Label label_permissionGroupName;
     }
 }
