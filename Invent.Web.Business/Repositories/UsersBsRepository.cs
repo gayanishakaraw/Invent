@@ -38,7 +38,7 @@ namespace Invent.Web.Business.Repositories
         {
             var user = (from item in _dbContext.Users
                         where item.Email == userParam.Email
-                        select item).FirstOrDefault();
+                        select item)?.FirstOrDefault();
 
             if (user == null)
                 throw new Exception("User not found");
@@ -65,6 +65,21 @@ namespace Invent.Web.Business.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            var user = (from item in _dbContext.Users
+                        where item.UserId == id
+                        select item)?.FirstOrDefault();
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            user.IsActive = false;
+
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<Users> AuthenticateAsync(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -72,7 +87,7 @@ namespace Invent.Web.Business.Repositories
 
             var user = await Task.Run(() =>
             {
-                return _dbContext.Users.SingleOrDefault(x => x.Email == username);
+                return _dbContext.Users.SingleOrDefault(x => x.Email == username && x.IsActive);
             });
 
             if (user == null)

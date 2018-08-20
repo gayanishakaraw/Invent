@@ -235,9 +235,9 @@ namespace Invent.Web.Business.Repositories
             throw new NotImplementedException();
         }
 
-        Task<IList<TEntity>> IGenericRepository<TEntity>.GetAllAsync()
+        async Task<IList<TEntity>> IGenericRepository<TEntity>.GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await this.DbSet.ToListAsync();
         }
 
         public virtual async Task<IList<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> match)
@@ -245,9 +245,9 @@ namespace Invent.Web.Business.Repositories
             return await DbSet.Where(match).ToListAsync().ConfigureAwait(false);
         }
 
-        Task<TEntity> IGenericRepository<TEntity>.GetByIdAsync(object id)
+        async Task<TEntity> IGenericRepository<TEntity>.GetByIdAsync(object id)
         {
-            throw new NotImplementedException();
+            return await DbSet.FindAsync(id).ConfigureAwait(false);
         }
 
         Task<int> IGenericRepository<TEntity>.CountAsync()
@@ -260,9 +260,16 @@ namespace Invent.Web.Business.Repositories
             throw new NotImplementedException();
         }
 
-        Task IGenericRepository<TEntity>.DeleteAsync(object id, bool saveChanges)
+        async Task IGenericRepository<TEntity>.DeleteAsync(object id, bool saveChanges)
         {
-            throw new NotImplementedException();
+            await Task.Run(() =>
+            {
+                this.DbSet.Remove(GetById(id));
+                if (saveChanges)
+                {
+                    Context.SaveChanges();
+                }
+            });
         }
 
         Task IGenericRepository<TEntity>.DeleteAsync(TEntity entity, bool saveChanges)

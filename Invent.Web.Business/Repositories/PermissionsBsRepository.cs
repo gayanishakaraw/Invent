@@ -45,7 +45,7 @@ namespace Invent.Web.Business.Repositories
             return result;
         }
 
-        public async Task<bool> HasFullAccessAsync(int userId, int moduleId)
+        private async Task<bool> HasFullAccessAsync(int userId, int moduleId)
         {
             return await Task.Run(() =>
             {
